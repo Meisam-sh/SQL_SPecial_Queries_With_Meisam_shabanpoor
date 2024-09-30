@@ -1,0 +1,27 @@
+select top 50 dl.Title as 'عنوان تفصیل طرف مقابل'
+
+,i.Date as 'تاریخ',p.Code as 'کد کالا'
+
+,p.Name as 'نام کالا',i.Quantity as 'مقدار'
+
+,tr.Name as 'عنوان عامل اول',tv.Value 'مقدار عامل اول'
+
+,ip.Quantity as 'مقدار',ip.Fee as 'فی',ip.NetPrice 'مبلغ'
+
+from lgs3.InventoryVoucherItem i
+
+join lgs3.ItemPrice ip on ip.InventoryVoucherItemRef=i.InventoryVoucherItemID
+
+join lgs3.InventoryVoucherItemTrackingFactor ivt on ivt.InventoryVoucherItemRef=i.InventoryVoucherItemID
+
+join lgs3.PartTrackingFactor pt on pt.PartTrackingFactorID=ivt.[1stPartInvTrackingFactor]
+
+join lgs3.TrackingFactor tr on tr.TrackingFactorID=pt.TrackingFactorRef
+
+join lgs3.TrackingFactorValue tv on tv.TrackingFactorRef=tr.TrackingFactorID and ip.TrackingFactor=tv.TrackingFactorValueID
+
+join lgs3.part p on p.PartID=i.PartRef
+
+join fin3.dl dl on dl.Code=i.CounterpartDLCode
+
+where i.InventoryVoucherSpecificationRef=14
